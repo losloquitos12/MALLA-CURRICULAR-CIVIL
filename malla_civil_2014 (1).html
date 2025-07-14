@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malla Curricular - Ingeniería Civil 2014</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .ciclo {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .ciclo h2 {
+      font-size: 1.2em;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+    .curso {
+      margin: 8px 0;
+      cursor: pointer;
+      background: #ecf0f1;
+      padding: 8px;
+      border-radius: 6px;
+      transition: background 0.3s;
+    }
+    .curso:hover {
+      background: #d0e9ff;
+    }
+    .info {
+      display: none;
+      font-size: 0.9em;
+      background: #dff9fb;
+      border-left: 4px solid #2980b9;
+      padding: 6px;
+      margin-top: 5px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular - Ingeniería Civil (Plan 2014)</h1>
+  <div class="grid" id="contenedor-ciclos"></div>
+
+  <script>
+    const cursosPorCiclo = [
+      { ciclo: "I", cursos: [
+        { nombre: "Álgebra y Geometría", codigo: "CIV14-0101", creditos: 4, horas: 6 },
+        { nombre: "Comunicación", codigo: "CIV14-0102", creditos: 3, horas: 4 },
+        { nombre: "Informática y Programación", codigo: "CIV14-0103", creditos: 2, horas: 4 },
+        { nombre: "Introducción a la Vida Universitaria", codigo: "CIV14-0104", creditos: 3, horas: 3 },
+        { nombre: "Matemática Básica", codigo: "CIV14-0105", creditos: 4, horas: 6 },
+        { nombre: "Metodología del Estudio", codigo: "CIV14-0106", creditos: 3, horas: 3 },
+        { nombre: "Química", codigo: "CIV14-0107", creditos: 3, horas: 4 }
+      ]},
+      { ciclo: "II", cursos: [
+        { nombre: "Álgebra Lineal", codigo: "CIV14-0208", creditos: 3, horas: 5 },
+        { nombre: "Cálculo en Una Variable", codigo: "CIV14-0209", creditos: 4, horas: 6 },
+        { nombre: "Dibujo Técnico y CAD", codigo: "CIV14-0210", creditos: 3, horas: 6 },
+        { nombre: "Física I", codigo: "CIV14-0211", creditos: 4, horas: 6 },
+        { nombre: "Introducción a la Filosofía", codigo: "CIV14-0212", creditos: 3, horas: 3 },
+        { nombre: "Topografía I", codigo: "CIV14-0213", creditos: 3, horas: 4 },
+        { nombre: "Liderazgo (EH)", codigo: "CIV14-0214", creditos: 2, horas: 3 }
+      ]},
+      { ciclo: "III", cursos: [
+        { nombre: "Antropología Filosófica y Teológica", codigo: "CIV14-0317", creditos: 3, horas: 3 },
+        { nombre: "Cálculo en Varias Variables", codigo: "CIV14-0318", creditos: 4, horas: 6 },
+        { nombre: "Estática", codigo: "CIV14-0319", creditos: 4, horas: 6 },
+        { nombre: "Física II", codigo: "CIV14-0320", creditos: 4, horas: 6 },
+        { nombre: "Geología General", codigo: "CIV14-0321", creditos: 2, horas: 3 },
+        { nombre: "Topografía II", codigo: "CIV14-0322", creditos: 3, horas: 4 },
+        { nombre: "Apreciación Literaria (EH)", codigo: "CIV14-0323", creditos: 2, horas: 3 }
+      ]},
+      { ciclo: "IV", cursos: [
+        { nombre: "Dinámica", codigo: "CIV14-0425", creditos: 4, horas: 6 },
+        { nombre: "Ecuaciones Diferenciales", codigo: "CIV14-0426", creditos: 4, horas: 6 },
+        { nombre: "Estadística y Probabilidades", codigo: "CIV14-0427", creditos: 4, horas: 6 },
+        { nombre: "Lógica y Gnoseología", codigo: "CIV14-0428", creditos: 3, horas: 3 },
+        { nombre: "Tecnología de los Materiales", codigo: "CIV14-0429", creditos: 4, horas: 6 },
+        { nombre: "Teología", codigo: "CIV14-0430", creditos: 3, horas: 3 }
+      ]},
+      { ciclo: "V", cursos: [
+        { nombre: "Arquitectura y Urbanismo", codigo: "CIV14-0531", creditos: 3, horas: 4 },
+        { nombre: "Historia de la Cultura Occidental I", codigo: "CIV14-0532", creditos: 3, horas: 3 },
+        { nombre: "Mecánica de Fluidos", codigo: "CIV14-0533", creditos: 4, horas: 6 },
+        { nombre: "Mecánica de Materiales I", codigo: "CIV14-0534", creditos: 4, horas: 6 },
+        { nombre: "Mecánica de Suelos I", codigo: "CIV14-0535", creditos: 4, horas: 6 },
+        { nombre: "Tecnología del Concreto", codigo: "CIV14-0536", creditos: 4, horas: 6 }
+      ]},
+      { ciclo: "VI", cursos: [
+        { nombre: "Construcción I", codigo: "CIV14-0637", creditos: 3, horas: 4 },
+        { nombre: "Fundamentos de la Ingeniería Ambiental", codigo: "CIV14-0638", creditos: 2, horas: 3 },
+        { nombre: "Hidráulica", codigo: "CIV14-0639", creditos: 3, horas: 4 },
+        { nombre: "Historia de la Cultura Occidental II", codigo: "CIV14-0640", creditos: 3, horas: 3 },
+        { nombre: "Mecánica de Materiales II", codigo: "CIV14-0641", creditos: 4, horas: 6 },
+        { nombre: "Mecánica de Suelos II", codigo: "CIV14-0642", creditos: 4, horas: 6 },
+        { nombre: "Moral", codigo: "CIV14-0643", creditos: 3, horas: 3 }
+      ]},
+      { ciclo: "VII", cursos: [
+        { nombre: "Análisis de la Realidad Peruana", codigo: "CIV14-0744", creditos: 3, horas: 3 },
+        { nombre: "Análisis Estructural I", codigo: "CIV14-0745", creditos: 4, horas: 6 },
+        { nombre: "Caminos I", codigo: "CIV14-0746", creditos: 3, horas: 4 },
+        { nombre: "Concreto Armado I", codigo: "CIV14-0747", creditos: 3, horas: 4 },
+        { nombre: "Construcción II", codigo: "CIV14-0748", creditos: 3, horas: 4 },
+        { nombre: "Hidrología", codigo: "CIV14-0749", creditos: 3, horas: 4 },
+        { nombre: "Instalaciones en Edificaciones", codigo: "CIV14-0750", creditos: 3, horas: 4 }
+      ]},
+      { ciclo: "VIII", cursos: [
+        { nombre: "Abastecimiento de Agua y Alcantarillado", codigo: "CIV14-0851", creditos: 3, horas: 4 },
+        { nombre: "Análisis Estructural II", codigo: "CIV14-0852", creditos: 4, horas: 6 },
+        { nombre: "Caminos II", codigo: "CIV14-0853", creditos: 3, horas: 4 },
+        { nombre: "Concreto Armado II", codigo: "CIV14-0854", creditos: 3, horas: 4 },
+        { nombre: "Costos y Presupuestos", codigo: "CIV14-0855", creditos: 3, horas: 4 },
+        { nombre: "Enseñanza Social de la Iglesia", codigo: "CIV14-0856", creditos: 3, horas: 3 },
+        { nombre: "Estructuras Metálicas y Compuestas", codigo: "CIV14-0857", creditos: 3, horas: 4 }
+      ]},
+      { ciclo: "IX", cursos: [
+        { nombre: "Albañilería Estructural", codigo: "CIV14-0958", creditos: 3, horas: 4 },
+        { nombre: "Ética Profesional", codigo: "CIV14-0959", creditos: 3, horas: 3 },
+        { nombre: "Ingeniería de Tránsito", codigo: "CIV14-0960", creditos: 3, horas: 4 },
+        { nombre: "Ingeniería Sísmica", codigo: "CIV14-0961", creditos: 4, horas: 6 },
+        { nombre: "Metodología de la Investigación Científica", codigo: "CIV14-0962", creditos: 3, horas: 4 },
+        { nombre: "Planificación y Control en la Construcción", codigo: "CIV14-0963", creditos: 3, horas: 4 }
+      ]},
+      { ciclo: "X", cursos: [
+        { nombre: "Gestión de la Construcción", codigo: "CIV14-1070", creditos: 4, horas: 6 },
+        { nombre: "Ingeniería de Cimentaciones", codigo: "CIV14-1071", creditos: 3, horas: 4 },
+        { nombre: "Modelamiento Informático en Edificaciones", codigo: "CIV14-1072", creditos: 3, horas: 4 },
+        { nombre: "Productividad en la Construcción", codigo: "CIV14-1073", creditos: 3, horas: 4 },
+        { nombre: "Proyecto de Tesis", codigo: "CIV14-1074", creditos: 3, horas: 6 }
+      ]},
+    ];
+
+    const contenedor = document.getElementById("contenedor-ciclos");
+
+    cursosPorCiclo.forEach(({ ciclo, cursos }) => {
+      const div = document.createElement("div");
+      div.className = "ciclo";
+      div.innerHTML = `<h2>Ciclo ${ciclo}</h2>`;
+
+      cursos.forEach(curso => {
+        const cursoDiv = document.createElement("div");
+        cursoDiv.className = "curso";
+        cursoDiv.innerHTML = `${curso.nombre}
+          <div class="info">
+            Código: ${curso.codigo}<br>
+            Créditos: ${curso.creditos}<br>
+            Horas: ${curso.horas}
+          </div>`;
+        cursoDiv.onclick = () => {
+          const info = cursoDiv.querySelector('.info');
+          info.style.display = info.style.display === 'block' ? 'none' : 'block';
+        };
+        div.appendChild(cursoDiv);
+      });
+
+      contenedor.appendChild(div);
+    });
+  </script>
+</body>
+</html>
